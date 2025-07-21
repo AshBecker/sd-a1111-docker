@@ -12,7 +12,7 @@ if [ -n "$S3_ACCESS_KEY" ] && [ -n "$S3_SECRET_KEY" ]; then
 fi
 
 # Mount S3 buckets directly to the models directories
-for d in Stable-diffusion VAE Lora ControlNet VAE-approx; do
+for d in Stable-diffusion Lora ControlNet VAE-approx; do
   mkdir -p /opt/stable-diffusion/stable-diffusion-webui/models/$d
   s3fs sd-files:/$d /opt/stable-diffusion/stable-diffusion-webui/models/$d \
     -o url=https://sgp1.vultrobjects.com \
@@ -26,7 +26,6 @@ done
 
 find /opt/stable-diffusion/stable-diffusion-webui/ \
     ! -path "/opt/stable-diffusion/stable-diffusion-webui/models/Stable-diffusion/*" \
-    ! -path "/opt/stable-diffusion/stable-diffusion-webui/models/VAE/*" \
     ! -path "/opt/stable-diffusion/stable-diffusion-webui/models/Lora/*" \
     ! -path "/opt/stable-diffusion/stable-diffusion-webui/models/ControlNet/*" \
     ! -path "/opt/stable-diffusion/stable-diffusion-webui/models/VAE-approx/*" \

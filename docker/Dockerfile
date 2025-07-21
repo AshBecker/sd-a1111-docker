@@ -33,11 +33,11 @@ RUN pip3 install --upgrade pip && \
     pip3 install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
 # Pre-install WebUI dependencies for faster startup
-RUN python3 launch.py --exit
+RUN python3 launch.py --exit --skip-torch-cuda-test
 
 # Copy baked-in models and embeddings from build context
-COPY models/Stable-diffusion/Cetus-Mix-v4.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/Cetus-Mix-v4.safetensors
-COPY models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors
+#COPY models/Stable-diffusion/Cetus-Mix-v4.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/Cetus-Mix-v4.safetensors
+#COPY models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors
 COPY models/VAE $HOME/stable-diffusion-webui/models/VAE
 COPY models/Lora $HOME/stable-diffusion-webui/models/Lora
 COPY models/VAE-approx $HOME/stable-diffusion-webui/models/VAE-approx
