@@ -5,14 +5,9 @@ ENV HOME=/opt/stable-diffusion
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    python3 \
-    python3-pip \
-    python3-venv \
-    wget \
-    nfs-common \
-    libgl1 \
-    libglib2.0-0 \
+    git python3 python3-pip python3-venv wget \
+    nfs-common libgl1 libglib2.0-0 \
+    ufw \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
@@ -24,7 +19,7 @@ RUN mkdir -p $HOME && \
 
 WORKDIR $HOME/stable-diffusion-webui
 
-# Clone extensions (add/remove as needed)
+# Clone extensions
 RUN git clone https://github.com/Mikubill/sd-webui-controlnet extensions/sd-webui-controlnet && \
     git clone https://github.com/Bing-su/adetailer extensions/adetailer && \
     git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete extensions/a1111-sd-webui-tagcomplete && \
@@ -37,15 +32,37 @@ RUN pip3 install --upgrade pip && \
     pip3 install -r requirements.txt && \
     pip3 install torch==2.0.0+cu113 torchvision==0.15.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
 
-# (Optional) Pre-install WebUI dependencies for faster startup
+# Pre-install WebUI dependencies for faster startup
 RUN python3 launch.py --exit
+
+# Copy baked-in models and embeddings from build context
+COPY Stable-diffusion $HOME/stable-diffusion-webui/models/Stable-diffusion
+COPY VAE $HOME/stable-diffusion-webui/models/VAE
+COPY Lora $HOME/stable-diffusion-webui/models/Lora
+COPY ControlNet $HOME/stable-diffusion-webui/models/ControlNet
+COPY VAE-approx $HOME/stable-diffusion-webui/models/VAE-approx
+COPY embeddings $HOME/stable-diffusion-webui/embeddings
+
+# Create output and log directories
+RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
+    $HOME/stable-diffusion-webui/outputs/img2img-images \
+    $HOME/stable-diffusion-webui/outputs/extra-images \
+    $HOME/stable-diffusion-webui/outputs/txt2img-grids \
+    $HOME/stable-diffusion-webui/outputs/img2img-grids \
+    $HOME/stable-diffusion-webui/outputs/init-images \
+    $HOME/stable-diffusion-webui/log/images \
+    /var/log/stable-diffusion
+
+# Copy styles.csv (custom prompts/styles)
+COPY --chown=sduser:sduser docker/styles.csv $HOME/stable-diffusion-webui/styles.csv
 
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set permissions
-RUN chown -R sduser:sduser $HOME
+RUN chown -R sduser:sduser $HOME && \
+    chown -R sduser:sduser /var/log/stable-diffusion
 
 # Expose WebUI port
 EXPOSE 7860
