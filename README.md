@@ -1,5 +1,5 @@
 # filepath: /stable-diffusion-docker/stable-diffusion-docker/README.md
-# Stable Diffusion Docker Setup
+# Stable Diffusion A1111 Docker Setup
 
 This project provides a Dockerized setup for running Stable Diffusion. It includes all necessary dependencies and configurations to get started quickly.
 
@@ -7,11 +7,12 @@ This project provides a Dockerized setup for running Stable Diffusion. It includ
 
 ```
 stable-diffusion-docker
-├── docker
+├── docker/
 │   ├── Dockerfile
 │   └── entrypoint.sh
-├── config
+├── config/
 │   └── stable-diffusion.service
+├── models/
 ├── README.md
 ```
 
@@ -24,7 +25,7 @@ The `Dockerfile` contains instructions to build the Docker image for running Sta
 To build the Docker image, navigate to the `docker` directory and run:
 
 ```bash
-docker build -t stable-diffusion-image .
+docker build -f docker/Dockerfile -t sd-webui:latest .
 ```
 
 ## Running the Docker Container
