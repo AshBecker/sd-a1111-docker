@@ -1,0 +1,17 @@
+[Unit]
+Description=Stable Diffusion WebUI
+After=network.target
+
+[Service]
+Type=simple
+User=sduser
+Group=sduser
+WorkingDirectory=/opt/stable-diffusion/stable-diffusion-webui
+ExecStart=/usr/local/bin/entrypoint.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/var/log/stable-diffusion/sdwebui.log
+StandardError=append:/var/log/stable-diffusion/sdwebui.log
+
+[Install]
+WantedBy=multi-user.target
