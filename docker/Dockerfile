@@ -30,7 +30,7 @@ RUN git clone https://github.com/Mikubill/sd-webui-controlnet extensions/sd-webu
 # Install Python dependencies
 RUN pip3 install --upgrade pip && \
     pip3 install -r requirements.txt && \
-    pip3 install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
+    pip3 install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
 # Pre-install WebUI dependencies for faster startup
 RUN python3 launch.py --exit
