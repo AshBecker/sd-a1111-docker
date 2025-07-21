@@ -6,7 +6,7 @@ This project provides a Dockerized setup for running Stable Diffusion. It includ
 ## Project Structure
 
 ```
-stable-diffusion-docker
+sd-a1111-docker
 ├── docker/
 │   ├── Dockerfile
 │   └── entrypoint.sh
@@ -22,7 +22,7 @@ The `Dockerfile` contains instructions to build the Docker image for running Sta
 
 ### Build the Docker Image
 
-To build the Docker image, navigate to the `docker` directory and run:
+To build the Docker image, run at project root:
 
 ```bash
 docker build -f docker/Dockerfile -t sd-webui:latest .
@@ -69,7 +69,3 @@ To set up a private Docker registry, follow these steps:
 ## Entry Point Script
 
 The `entrypoint.sh` script is executed when the Docker container starts. It sets up the environment and starts the Stable Diffusion service.
-
-## Conclusion
-
-This setup allows you to easily deploy and run Stable Diffusion in a Docker container, leveraging GPU resources dynamically. Make sure to follow the instructions carefully to ensure a smooth setup.

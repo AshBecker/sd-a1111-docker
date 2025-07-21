@@ -36,8 +36,6 @@ RUN pip3 install --upgrade pip && \
 RUN python3 launch.py --exit --skip-torch-cuda-test
 
 # Copy baked-in models and embeddings from build context
-#COPY models/Stable-diffusion/Cetus-Mix-v4.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/Cetus-Mix-v4.safetensors
-#COPY models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors
 COPY models/VAE $HOME/stable-diffusion-webui/models/VAE
 COPY models/Lora $HOME/stable-diffusion-webui/models/Lora
 COPY models/VAE-approx $HOME/stable-diffusion-webui/models/VAE-approx
@@ -53,7 +51,7 @@ RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
     /var/log/stable-diffusion
 
 # Copy styles.csv (custom prompts/styles)
-COPY --chown=sduser:sduser styles.csv $HOME/stable-diffusion-webui/styles.csv
+COPY --chown=sduser:sduser docker/styles.csv $HOME/stable-diffusion-webui/styles.csv
 
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
