@@ -7,7 +7,7 @@ ENV HOME=/opt/stable-diffusion
 RUN apt-get update && apt-get install -y \
     git python3 python3-pip python3-venv wget \
     nfs-common libgl1 libglib2.0-0 \
-    ufw \
+    ufw s3fs s3cmd\
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
@@ -36,7 +36,8 @@ RUN pip3 install --upgrade pip && \
 RUN python3 launch.py --exit
 
 # Copy baked-in models and embeddings from build context
-COPY Stable-diffusion $HOME/stable-diffusion-webui/models/Stable-diffusion
+COPY Stable-diffusion/Cetus-Mix-v4.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/Cetus-Mix-v4.safetensors
+COPY Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors $HOME/Stable-diffusion-webui/models/Stable-diffusion/CyberRealistic_V12.5_FP16.safetensors
 COPY VAE $HOME/stable-diffusion-webui/models/VAE
 COPY Lora $HOME/stable-diffusion-webui/models/Lora
 COPY ControlNet $HOME/stable-diffusion-webui/models/ControlNet
@@ -54,7 +55,7 @@ RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
     /var/log/stable-diffusion
 
 # Copy styles.csv (custom prompts/styles)
-COPY --chown=sduser:sduser docker/styles.csv $HOME/stable-diffusion-webui/styles.csv
+COPY --chown=sduser:sduser sd-a1111-docker/docker/styles.csv $HOME/stable-diffusion-webui/styles.csv
 
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
