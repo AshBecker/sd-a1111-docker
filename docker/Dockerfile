@@ -26,9 +26,6 @@ RUN pip3 install --upgrade pip && \
     python3 launch.py --exit --skip-torch-cuda-test || true && \
     rm -rf /root/.cache /home/sduser/.cache $HOME/stable-diffusion-webui/.cache
 
-# Copy baked-in models and embeddings from build context
-#COPY models/ $HOME/stable-diffusion-webui/models/
-
 # Create output and log directories
 RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
     $HOME/stable-diffusion-webui/outputs/img2img-images \
@@ -45,6 +42,9 @@ COPY --chown=sduser:sduser docker/styles.csv $HOME/stable-diffusion-webui/styles
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Copy baked-in models and embeddings from build context
+COPY models/ $HOME/stable-diffusion-webui/models/
 
 # Set permissions
 RUN chown -R sduser:sduser $HOME && \
