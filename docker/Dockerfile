@@ -36,9 +36,7 @@ RUN pip3 install --upgrade pip && \
 RUN python3 launch.py --exit --skip-torch-cuda-test
 
 # Copy baked-in models and embeddings from build context
-COPY models/VAE $HOME/stable-diffusion-webui/models/VAE
-COPY models/Lora $HOME/stable-diffusion-webui/models/Lora
-COPY models/VAE-approx $HOME/stable-diffusion-webui/models/VAE-approx
+COPY models/ $HOME/stable-diffusion-webui/models/
 
 # Create output and log directories
 RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
