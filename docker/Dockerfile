@@ -19,24 +19,15 @@ RUN mkdir -p $HOME && \
 
 WORKDIR $HOME/stable-diffusion-webui
 
-# Clone extensions
-RUN git clone https://github.com/Mikubill/sd-webui-controlnet extensions/sd-webui-controlnet && \
-    git clone https://github.com/Bing-su/adetailer extensions/adetailer && \
-    git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete extensions/a1111-sd-webui-tagcomplete && \
-    git clone https://github.com/dvruette/sd-webui-fabric extensions/sd-webui-fabric && \
-    git clone https://github.com/some9000/StylePile extensions/StylePile && \
-    git clone https://github.com/nonnonstop/sd-webui-3d-open-pose-editor extensions/sd-webui-3d-open-pose-editor
-
 # Install Python dependencies
 RUN pip3 install --upgrade pip && \
-    pip3 install -r requirements.txt && \
-    pip3 install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
-
-# Pre-install WebUI dependencies for faster startup
-RUN python3 launch.py --exit --skip-torch-cuda-test
+    pip3 install --no-cache-dir -r requirements.txt && \
+    pip3 install --no-cache-dir torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118 \
+    python3 launch.py --exit --skip-torch-cuda-test || true && \
+    rm -rf /root/.cache /home/sduser/.cache $HOME/stable-diffusion-webui/.cache
 
 # Copy baked-in models and embeddings from build context
-COPY models/ $HOME/stable-diffusion-webui/models/
+#COPY models/ $HOME/stable-diffusion-webui/models/
 
 # Create output and log directories
 RUN mkdir -p $HOME/stable-diffusion-webui/outputs/txt2img-images \
@@ -61,8 +52,5 @@ RUN chown -R sduser:sduser $HOME && \
 
 # Expose WebUI port
 EXPOSE 7860
-
-# Switch to non-root user
-USER sduser
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

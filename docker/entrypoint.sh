@@ -11,6 +11,12 @@ if [ -n "$S3_ACCESS_KEY" ] && [ -n "$S3_SECRET_KEY" ]; then
   chmod 600 /etc/passwd-s3fs
 fi
 
+# Clone extensions
+git clone https://github.com/Mikubill/sd-webui-controlnet extensions/sd-webui-controlnet && \
+git clone https://github.com/Bing-su/adetailer extensions/adetailer && \
+git clone https://github.com/DominikDoom/a1111-sd-webui-tagcomplete extensions/a1111-sd-webui-tagcomplete && \
+git clone https://github.com/nonnonstop/sd-webui-3d-open-pose-editor extensions/sd-webui-3d-open-pose-editor
+
 # Mount S3 buckets directly to the models directories
 for d in Stable-diffusion Lora ControlNet VAE-approx; do
   mkdir -p /opt/stable-diffusion/stable-diffusion-webui/models/$d
@@ -38,4 +44,4 @@ chown -R sduser:sduser /opt/stable-diffusion/stable-diffusion-webui/log
 chown -R sduser:sduser /var/log/stable-diffusion
 
 # Start the Stable Diffusion WebUI
-exec /opt/stable-diffusion/stable-diffusion-webui/webui.sh --listen --api --xformers
+exec su - sduser -c "/opt/stable-diffusion/stable-diffusion-webui/webui.sh --listen --api --xformers"
